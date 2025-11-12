@@ -1,0 +1,604 @@
+{{ define "main" }}
+<!-- Single-page review switcher: banner full-width, content in max-w-7xl -->
+{{ $pages := where .Site.RegularPages "Section" "reviews" }}
+{{ $first := (index (first 1 $pages) 0).File.TranslationBaseName }}
+
+<section class="w-full">
+  <div id="review-detail">
+    {{/* Server-side initial render of the first review for graceful fallback */}}
+    {{ with (index (first 1 $pages) 0) }}
+    <!-- Banner with small centered demo video (keeps banner design intact) -->
+    <div class="w-full relative">
+      {{ with .Params.banner }}
+      <img src="{{ . }}" alt="{{ $.Title }}" class="w-full h-[260px] md:h-[360px] lg:h-[420px] object-cover" />
+      {{ end }}
+      {{ $fallback1 := "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" }}
+      {{ $fallback2 := "https://www.youtube.com/embed/aqz-KE-bpKQ" }}
+      {{ $fallback3 := "https://www.youtube.com/embed/ScMzIvxBSi4" }}
+      {{ $cands := slice $fallback1 $fallback2 $fallback3 }}
+      {{ if .Params.video }}
+        {{ $cands = slice .Params.video $fallback1 $fallback2 $fallback3 }}
+      {{ end }}
+      {{ $video := index (shuffle $cands) 0 }}
+      {{ $isYT := or (in $video "youtube.com") (or (in $video "youtu.be") (in $video "embed")) }}
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[180px] md:h-[250px] lg:h-[290px] bg-black/90 shadow-lg ring-1 ring-black/20">
+        {{ if $isYT }}
+        <iframe class="w-full h-full" src="{{ $video }}" title="{{ .Title }}" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+        {{ else }}
+        <video controls playsinline preload="metadata" class="w-full h-full object-cover">
+          <source src="{{ $video }}" type="video/mp4" />
+        </video>
+        {{ end }}
+      </div>
+    </div>
+
+    
+
+    <!-- Content card -->
+    <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+      <div class="bg-white shadow-sm -mt-6 md:-mt-14 lg:-mt-20 relative z-10">
+        <div class="px-6 md:px-8 lg:px-10 py-6">
+          <h1 class="text-2xl md:text-[50px] font-light uppercase font-[Oswald] tracking-wide text-black mb-3">{{ .Title
+            }}</h1>
+          {{ $sub := or .Params.subtext (or .Params.subtitle .Params.summary) }}
+          {{ if $sub }}
+          <div class="text-[18px] md:text-[22px] lg:text-[24px] leading-8 text-gray-700 mb-6 font-light">{{ $sub | markdownify }}</div>
+          {{ else }}
+          {{/* Fallback: first ~400 words from body content when no subtext provided */}}
+          {{ $raw := .Content | plainify }}
+          {{ $parts := split $raw " " }}
+          {{ $excerpt := delimit ( first 400 $parts ) " " }}
+          <div class="text-[18px] md:text-[22px] lg:text-[24px] leading-8 text-gray-700 mb-6 font-light">{{ $excerpt }}…</div>
+          {{ end }}
+
+          <!-- Meta -->
+          <div class="flex items-center gap-4 text-xs text-gray-500 mb-6">
+            {{ with .Params.author }}<span class="hover:underline">{{ . }}</span>{{ end }}
+            <span>•</span>
+            <span>{{ .Date.Format "March 2, 2006" }}</span>
+          </div>
+
+          <!-- Shares bar -->
+          <div class="flex items-center gap-4 mb-6">
+            <div class="text-[#fb4948] text-5xl md:text-6xl font-[Oswald] font-bold leading-none">{{ with .Params.shares }}{{ . }}{{ else }}0{{ end }}</div>
+            <div class="text-gray-500 text-sm">shares</div>
+            <div class="flex items-center w-full ml-4">
+              <a href="#" class="flex-1 h-10 md:h-12 bg-[#3b5998] text-white flex items-center gap-3 px-4">
+                <span class="iconify text-white text-lg md:text-xl" data-icon="mdi:facebook"></span>
+                <span class="font-medium">Facebook</span>
+              </a>
+              <a href="#" class="flex-1 h-10 md:h-12 bg-black text-white flex items-center gap-3 px-4">
+                <span class="iconify text-white text-lg md:text-xl" data-icon="simple-icons:x"></span>
+                <span class="font-medium">Twitter</span>
+              </a>
+              <button class="h-10 md:h-14 w-10 bg-gray-200 text-gray-700 font-semibold">+</button>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="text-[15px] leading-7 space-y-5">
+            {{ .Content }}
+          </div>
+
+          <!-- Summary section -->
+          {{ $summary := or .Params.summary_long (or .Params.summary $sub) }}
+          {{ if not $summary }}
+          {{ $rawsum := .Content | plainify }}
+          {{ $sumParts := split $rawsum " " }}
+          {{ $summary = delimit ( first 200 $sumParts ) " " }}
+          {{ end }}
+          <div class="mt-8">
+            <div class="bg-[#131517] text-white px-6 py-6">
+              <h3 class="uppercase tracking-wide font-[Oswald] text-[22px] mb-4">Summary</h3>
+              <p class="text-[16px] md:text-[18px] leading-8">{{ $summary }}</p>
+            </div>
+          </div>
+
+          <!-- Good/Bad + Score section -->
+          {{ $pros := or .Params.pros (slice "Dynamically myocordinate intermandated technologies" "Compellingly disseminate next-generation e-tailers" "Dynamically utilize performance based solutions through granular value") }}
+          {{ $cons := or .Params.cons (slice "Assertively whiteboard team driven manufactured" "Collaboratively impact impactful infrastructures" "Competently pursue customer directed value") }}
+          {{ $rating := or .Params.rating 4.9 }}
+          {{ $label := "POOR" }}
+          {{ if ge $rating 5 }}{{ $label = "AVERAGE" }}{{ end }}
+          {{ if ge $rating 7 }}{{ $label = "GOOD" }}{{ end }}
+          {{ if ge $rating 8.5 }}{{ $label = "EXCELLENT" }}{{ end }}
+          <div class="mt-6">
+            <div class="grid grid-cols-1 md:grid-cols-12">
+              <div class="md:col-span-8 bg-[#5f7fa1] text-white p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="uppercase tracking-wide font-[Oswald] text-[20px] mb-3">Good</h4>
+                    <ul class="space-y-3">
+                      {{ range $pros }}
+                      <li class="flex items-start gap-3">
+                        <span class="inline-block w-3 h-3 rounded-full bg-[#ffd95c] mt-2"></span>
+                        <span>{{ . }}</span>
+                      </li>
+                      {{ end }}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="uppercase tracking-wide font-[Oswald] text-[20px] mb-3">Bad</h4>
+                    <ul class="space-y-3">
+                      {{ range $cons }}
+                      <li class="flex items-start gap-3">
+                        <span class="inline-block w-3 h-3 rounded-full bg-[#fb4948] mt-2"></span>
+                        <span>{{ . }}</span>
+                      </li>
+                      {{ end }}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="md:col-span-4 bg-[#35f4a5] text-[#0c3b2e] flex items-center justify-center p-6">
+                <div class="text-center">
+                  <div class="text-[72px] font-[Oswald] md:text-[90px] font-bold leading-none">{{ printf "%.1f" $rating }}</div>
+                  <div class="uppercase font-[Oswald] text-[22px] mt-2">{{ $label }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Author box -->
+          {{ $author := or .Params.author "Ghostpool" }}
+          {{ $authorImg := or .Params.author_image "https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" }}
+          {{ $authorNote := or .Params.author_note (delimit (first 60 (split (.Content | plainify) " ")) " ") }}
+          {{ $authorNoteLong := or .Params.author_note_long $authorNote }}
+          <div class="mt-8 bg-gray-100 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+              <div class="md:col-span-3 flex items-center gap-4">
+                <img src="{{ $authorImg }}" alt="{{ $author }}" class="w-20 h-20 rounded-full object-cover">
+                <div>
+                  <div class="text-xs uppercase text-gray-500">Written by</div>
+                  <div class="font-[Oswald] uppercase text-[18px]">{{ $author }}</div>
+                  <div class="mt-2 flex items-center gap-3">
+                    <span class="iconify text-[#1da1f2] text-xl" data-icon="mdi:twitter"></span>
+                    <span class="iconify text-[#3b5998] text-xl" data-icon="mdi:facebook"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="md:col-span-9">
+                <p class="text-gray-700 text-[16px] leading-7">{{ $authorNoteLong }}.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Have Your Say: vote bar -->
+          {{ $votesUp := or .Params.votes_up 271 }}
+          {{ $votesDown := or .Params.votes_down -85 }}
+          <div class="mt-8">
+            <h3 class="text-center uppercase font-[Oswald] tracking-wide text-gray-600 mb-3">Have your say!</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 ">
+              <button type="button" data-vote="up" data-count="{{ $votesUp }}"
+                class="w-full bg-[#35a79c] hover:bg-[#2f9288] text-white py-3 px-4  shadow flex items-center justify-center">
+                <span class="font-semibold">Vote Up</span>
+                <span class="ml-2" data-role="vote-label">+{{ $votesUp }}</span>
+              </button>
+              <button type="button" data-vote="down" data-count="{{ $votesDown }}"
+                class="w-full bg-[#fe4a49] hover:bg-[#d94f4c] text-white py-3 px-4  shadow flex items-center justify-center">
+                <span class="font-semibold">Vote Down</span>
+                <span class="ml-2" data-role="vote-label">{{ $votesDown }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- You may also like -->
+          <div class="mt-10">
+            <h3 class="uppercase font-[Oswald] text-[20px] text-[#3e6a91] mb-4">You may also like</h3>
+            {{ $related := ( shuffle ( where $pages "File.TranslationBaseName" "ne" .File.TranslationBaseName ) ) }}
+            {{ $count := len $related }}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {{ range first 4 $related }}
+              {{ $item := . }}
+              <a href="{{ $.RelPermalink }}?slug={{ $item.File.TranslationBaseName }}" data-slug="{{ $item.File.TranslationBaseName }}" class="block group">
+                <div class="w-full h-36 bg-gray-200 overflow-hidden">
+                  {{ with $item.Params.banner }}
+                  <img src="{{ . }}" alt="{{ $item.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition" />
+                  {{ else }}
+                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                  {{ end }}
+                </div>
+                <div class="mt-3">
+                  <div class="font-medium group-hover:underline">{{ $item.Title }}</div>
+                  <div class="text-xs text-gray-500">{{ $item.Date.Format "March 2, 2006" }}</div>
+                </div>
+              </a>
+              {{ end }}
+              {{ if lt $count 4 }}
+                {{ $need := sub 4 $count }}
+                {{ range seq $need }}
+                <a href="{{ $.RelPermalink }}" class="block group">
+                  <div class="w-full h-36 bg-gray-200 overflow-hidden">
+                    <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="font-medium group-hover:underline">Explore more reviews</div>
+                    <div class="text-xs text-gray-500">See all</div>
+                  </div>
+                </a>
+                {{ end }}
+              {{ end }}
+            </div>
+          </div>
+
+          <!-- Leave a reply -->
+          <div class="mt-10">
+            <h3 class="uppercase font-[Oswald] text-[20px] text-gray-700 mb-4">Leave a reply</h3>
+            <div class="text-sm text-gray-600 mb-3">Login with your Social ID</div>
+            <div class="flex items-center gap-3 text-2xl mb-4">
+              <span class="iconify text-[#3b5998]" data-icon="mdi:facebook"></span>
+              <span class="iconify text-[#1da1f2]" data-icon="mdi:twitter"></span>
+              <span class="iconify text-[#db4437]" data-icon="mdi:google"></span>
+              <span class="iconify text-[#e1306c]" data-icon="mdi:instagram"></span>
+            </div>
+            <div class="text-xs text-gray-500 mb-2">Your email address will not be published. Required fields are marked
+              <span class="text-red-500 font-medium">*</span></div>
+            <form class="space-y-4">
+              <label class="block">
+                <span class="text-sm text-gray-700">Comment <span class="text-red-500">*</span></span>
+                <textarea rows="6" class="mt-1 w-full border border-gray-300 rounded p-3   focus:border-[#fe4a49] outline-none"
+                  placeholder="Write your comment…"></textarea>
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <input type="text" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Name *">
+                <input type="email" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Email *">
+                <input type="url" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Website">
+              </div>
+              <div>
+                <button type="button" class="bg-black text-white px-6 py-2 rounded">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</section>
+
+<!-- Pre-render templates for each review and inject client-side switcher -->
+<div class="hidden" aria-hidden="true">
+  {{ range $pages }}
+  <template id="tpl-{{ .File.TranslationBaseName }}">
+    <div>
+      <!-- Banner with small centered demo video (client-side template) -->
+      <div class="w-full relative">
+        {{ with .Params.banner }}
+        <img src="{{ . }}" alt="{{ $.Title }}" class="w-full h-[260px] md:h-[360px] lg:h-[420px] object-cover" />
+        {{ end }}
+        {{ $fallback1 := "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" }}
+        {{ $fallback2 := "https://www.youtube.com/embed/aqz-KE-bpKQ" }}
+        {{ $fallback3 := "https://www.youtube.com/embed/ScMzIvxBSi4" }}
+        {{ $cands := slice $fallback1 $fallback2 $fallback3 }}
+        {{ if .Params.video }}
+          {{ $cands = slice .Params.video $fallback1 $fallback2 $fallback3 }}
+        {{ end }}
+        {{ $video := index (shuffle $cands) 0 }}
+        {{ $isYT := or (in $video "youtube.com") (or (in $video "youtu.be") (in $video "embed")) }}
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[180px] md:h-[220px] lg:h-[260px] bg-black/90 shadow-lg ring-1 ring-black/20">
+          {{ if $isYT }}
+          <iframe class="w-full h-full" src="{{ $video }}" title="{{ .Title }}" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+          {{ else }}
+          <video controls playsinline preload="metadata" class="w-full h-full object-cover">
+            <source src="{{ $video }}" type="video/mp4" />
+          </video>
+          {{ end }}
+        </div>
+      </div>
+      
+      <!-- Content card -->
+      <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+        <div class="bg-white shadow-sm -mt-6 md:-mt-8 lg:-mt-10 relative z-10">
+          <div class="px-6 md:px-8 lg:px-10 py-6">
+            <h1 class="text-2xl md:text-4xl font-light uppercase font-[Oswald] tracking-wide text-black mb-3">{{ .Title
+              }}</h1>
+            {{ $sub := or .Params.subtext (or .Params.subtitle .Params.summary) }}
+            {{ if $sub }}
+            <div class="text-[18px] md:text-[22px] lg:text-[24px] leading-8 text-gray-700 mb-6 font-light">{{ $sub | markdownify }}</div>
+            {{ else }}
+            {{ $raw := .Content | plainify }}
+            {{ $parts := split $raw " " }}
+            {{ $excerpt := delimit ( first 400 $parts ) " " }}
+            <div class="text-[18px] md:text-[22px] lg:text-[24px] leading-8 text-gray-700 mb-6 font-light">{{ $excerpt }}…</div>
+            {{ end }}
+
+            <div class="flex items-center gap-4 text-xs text-gray-500 mb-6">
+              {{ with .Params.author }}<span class="hover:underline">{{ . }}</span>{{ end }}
+              <span>•</span>
+              <span>{{ .Date.Format "March 2, 2006" }}</span>
+            </div>
+
+            <div class="flex items-center gap-4 mb-6">
+              <div class="text-[#fb4948] text-5xl md:text-6xl font-bold leading-none">{{ with .Params.shares }}{{ . }}{{ else }}0{{ end }}</div>
+              <div class="text-gray-500 text-sm">shares</div>
+              <div class="flex items-center w-full ml-4">
+                <a href="#" class="flex-1 h-10 md:h-14 bg-[#3b5998] text-white flex items-center gap-3 px-4">
+                  <span class="iconify text-white text-lg md:text-xl" data-icon="mdi:facebook"></span>
+                  <span class="font-medium">Facebook</span>
+                </a>
+                <a href="#" class="flex-1 h-10 md:h-14 bg-black text-white flex items-center gap-3 px-4">
+                  <span class="iconify text-white text-lg md:text-xl" data-icon="simple-icons:x"></span>
+                  <span class="font-medium">Twitter</span>
+                </a>
+                <button class="h-10 md:h-14 w-10 bg-gray-200 text-gray-700 font-semibold">+</button>
+              </div>
+            </div>
+
+            <div class="text-[15px] leading-7 space-y-5">
+              {{ .Content }}
+            </div>
+            {{ $summary := or .Params.summary_long (or .Params.summary $sub) }}
+            {{ if not $summary }}
+            {{ $rawsum := .Content | plainify }}
+            {{ $sumParts := split $rawsum " " }}
+            {{ $summary = delimit ( first 200 $sumParts ) " " }}
+            {{ end }}
+            <div class="mt-8">
+              <div class="bg-[#131517] text-white px-6 py-6">
+                <h3 class="uppercase tracking-wide font-[Oswald] text-[22px] mb-4">Summary</h3>
+                <p class="text-[16px] md:text-[18px] leading-8">{{ $summary }}</p>
+              </div>
+            </div>
+
+            {{ $pros := or .Params.pros (slice "Dynamically myocordinate intermandated technologies" "Compellingly disseminate next-generation e-tailers" "Dynamically utilize performance based solutions through granular value") }}
+            {{ $cons := or .Params.cons (slice "Assertively whiteboard team driven manufactured" "Collaboratively impact impactful infrastructures" "Competently pursue customer directed value") }}
+            {{ $rating := or .Params.rating 4.9 }}
+            {{ $label := "POOR" }}
+            {{ if ge $rating 5 }}{{ $label = "AVERAGE" }}{{ end }}
+            {{ if ge $rating 7 }}{{ $label = "GOOD" }}{{ end }}
+            {{ if ge $rating 8.5 }}{{ $label = "EXCELLENT" }}{{ end }}
+            <div class="mt-6">
+              <div class="grid grid-cols-1 md:grid-cols-12">
+                <div class="md:col-span-8 bg-[#5f7fa1] text-white p-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 class="uppercase tracking-wide font-[Oswald] text-[20px] mb-3">Good</h4>
+                      <ul class="space-y-3">
+                        {{ range $pros }}
+                        <li class="flex items-start gap-3">
+                          <span class="inline-block w-3 h-3 rounded-full bg-[#ffd95c] mt-2"></span>
+                          <span>{{ . }}</span>
+                        </li>
+                        {{ end }}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 class="uppercase tracking-wide font-[Oswald] text-[20px] mb-3">Bad</h4>
+                      <ul class="space-y-3">
+                        {{ range $cons }}
+                        <li class="flex items-start gap-3">
+                          <span class="inline-block w-3 h-3 rounded-full bg-[#fb4948] mt-2"></span>
+                          <span>{{ . }}</span>
+                        </li>
+                        {{ end }}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="md:col-span-4 bg-[#35f4a5] text-[#0c3b2e] flex items-center justify-center p-6">
+                  <div class="text-center">
+                    <div class="text-[72px] md:text-[90px] font-bold leading-none">{{ printf "%.1f" $rating }}</div>
+                    <div class="uppercase font-[Oswald] text-[22px] mt-2">{{ $label }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{ $author := or .Params.author "Ghostpool" }}
+            {{ $authorImg := or .Params.author_image "https://thumbs.dreamstime.com/b/portrait-handsome-smiling-young-man-folded-arms-smiling-joyful-cheerful-men-crossed-hands-isolated-studio-shot-172869765.jpg" }}
+            {{ $authorNote := or .Params.author_note (delimit (first 60 (split (.Content | plainify) " ")) " ") }}
+            {{ $authorNoteLong := or .Params.author_note_long $authorNote }}
+            <div class="mt-8 bg-gray-100 p-6">
+              <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+                <div class="md:col-span-3 flex items-center gap-4">
+                  <img src="{{ $authorImg }}" alt="{{ $author }}" class="w-20 h-20 rounded-full object-cover">
+                  <div>
+                    <div class="text-xs uppercase text-gray-500">Written by</div>
+                    <div class="font-[Oswald] uppercase text-[18px]">{{ $author }}</div>
+                    <div class="mt-2 flex items-center gap-3">
+                      <span class="iconify text-[#1da1f2] text-xl" data-icon="mdi:twitter"></span>
+                      <span class="iconify text-[#3b5998] text-xl" data-icon="mdi:facebook"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="md:col-span-9">
+                  <p class="text-gray-700 text-[16px] leading-7">{{ $authorNoteLong }}.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Have Your Say: vote bar -->
+      {{ $votesUp := or .Params.votes_up 271 }}
+      {{ $votesDown := or .Params.votes_down -85 }}
+      <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-8">
+        <h3 class="text-center uppercase font-[Oswald] tracking-wide text-[#3e6a91] mb-3">Have your say!</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 ">
+          <button type="button" data-vote="up" data-count="{{ $votesUp }}"
+            class="w-full bg-[#35a79c] hover:bg-[#2f9288] text-white py-3 px-4   shadow flex items-center justify-center">
+            <span class="font-semibold">Vote Up</span>
+            <span class="ml-2" data-role="vote-label">+{{ $votesUp }}</span>
+          </button>
+          <button type="button" data-vote="down" data-count="{{ $votesDown }}"
+            class="w-full bg-[#fe4a49] hover:bg-[#d94f4c] text-white py-3 px-4   shadow flex items-center justify-center">
+            <span class="font-semibold">Vote Down</span>
+            <span class="ml-2" data-role="vote-label">{{ $votesDown }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- You may also like -->
+      <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-10">
+        <h3 class="uppercase font-[Oswald] text-[20px] text-[#3e6a91] mb-4">You may also like</h3>
+        {{ $related := ( shuffle ( where $pages "File.TranslationBaseName" "ne" .File.TranslationBaseName ) ) }}
+        {{ $count := len $related }}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {{ range first 4 $related }}
+          {{ $rel := . }}
+          <a href="{{ $.RelPermalink }}?slug={{ $rel.File.TranslationBaseName }}" data-slug="{{ $rel.File.TranslationBaseName }}" class="block group">
+            <div class="w-full h-36 bg-gray-200 overflow-hidden">
+              {{ with $rel.Params.banner }}
+              <img src="{{ . }}" alt="{{ $rel.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition" />
+              {{ else }}
+              <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+              {{ end }}
+            </div>
+            <div class="mt-3">
+              <div class="font-medium group-hover:underline">{{ $rel.Title }}</div>
+              <div class="text-xs text-gray-500">{{ $rel.Date.Format "March 2, 2006" }}</div>
+            </div>
+          </a>
+          {{ end }}
+          {{ if lt $count 4 }}
+            {{ $need := sub 4 $count }}
+            {{ range seq $need }}
+            <a href="{{ $.RelPermalink }}" class="block group">
+              <div class="w-full h-36 bg-gray-200 overflow-hidden">
+                <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+              </div>
+              <div class="mt-3">
+                <div class="font-medium group-hover:underline">Explore more reviews</div>
+                <div class="text-xs text-gray-500">See all</div>
+              </div>
+            </a>
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+
+      <!-- Leave a reply -->
+      <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-10">
+        <h3 class="uppercase font-[Oswald] text-[20px] text-gray-700 mb-4">Leave a reply</h3>
+        <div class="text-sm text-gray-600 mb-3">Login with your Social ID</div>
+        <div class="flex items-center gap-3 text-2xl mb-4">
+          <span class="iconify text-[#3b5998]" data-icon="mdi:facebook"></span>
+          <span class="iconify text-[#1da1f2]" data-icon="mdi:twitter"></span>
+          <span class="iconify text-[#db4437]" data-icon="mdi:google"></span>
+          <span class="iconify text-[#e1306c]" data-icon="mdi:instagram"></span>
+        </div>
+        <div class="text-xs text-gray-500 mb-2">Your email address will not be published. Required fields are marked
+          <span class="text-red-500 font-medium">*</span></div>
+        <form class="space-y-4">
+          <label class="block">
+            <span class="text-sm text-gray-700">Comment <span class="text-red-500">*</span></span>
+            <textarea rows="6" class="mt-1 w-full border border-gray-300 rounded p-3   focus:border-[#fe4a49] outline-none" placeholder="Write your comment…"></textarea>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <input type="text" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Name *">
+            <input type="email" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Email *">
+            <input type="url" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Website">
+          </div>
+          <div>
+            <button type="button" class="bg-black text-white px-6 py-2 rounded">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </template>
+  {{ end }}
+</div>
+
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    let slug = params.get('slug');
+    const defaultSlug = "{{ $first }}";
+
+    function render(s) {
+      const tpl = document.getElementById('tpl-' + s);
+      const target = document.getElementById('review-detail');
+      if (!tpl || !target) return;
+      target.innerHTML = tpl.innerHTML;
+    }
+
+    if (!slug) slug = defaultSlug;
+    render(slug);
+
+    // Intercept clicks on links carrying data-slug to switch content without navigation
+    window.addEventListener('click', function (e) {
+      const a = e.target.closest('a[data-slug]');
+      if (a) {
+        e.preventDefault();
+        const s = a.getAttribute('data-slug');
+        const url = new URL(window.location.href);
+        url.searchParams.set('slug', s);
+        history.pushState({ slug: s }, '', url.toString());
+        render(s);
+      }
+
+      // Handle vote buttons (works after dynamic re-render)
+      const voteBtn = e.target.closest('button[data-vote]');
+      if (voteBtn) {
+        e.preventDefault();
+        const type = voteBtn.getAttribute('data-vote');
+        let count = parseInt(voteBtn.getAttribute('data-count'), 10) || 0;
+        count = type === 'up' ? count + 1 : count - 1;
+        voteBtn.setAttribute('data-count', String(count));
+        const label = voteBtn.querySelector('[data-role="vote-label"]');
+        if (label) label.textContent = type === 'up' ? `+${count}` : `${count}`;
+      }
+
+      // Handle banner video overlay open/close
+      const playBtn = e.target.closest('button[data-role="play-video"]');
+      if (playBtn) {
+        e.preventDefault();
+        const url = playBtn.getAttribute('data-video');
+        if (!url) return;
+        const root = playBtn.closest('[class*="relative"]');
+        if (!root) return;
+        const overlay = root.querySelector('[data-role="video-overlay"]');
+        const container = root.querySelector('[data-role="video-container"]');
+        if (!overlay || !container) return;
+
+        container.innerHTML = '';
+        if (url.endsWith('.mp4')) {
+          const vid = document.createElement('video');
+          vid.setAttribute('controls', '');
+          vid.setAttribute('autoplay', '');
+          vid.setAttribute('muted', '');
+          vid.setAttribute('playsinline', '');
+          vid.style.width = '100%';
+          vid.style.height = '100%';
+          const src = document.createElement('source');
+          src.src = url;
+          src.type = 'video/mp4';
+          vid.appendChild(src);
+          container.appendChild(vid);
+        } else {
+          const iframe = document.createElement('iframe');
+          iframe.src = url;
+          iframe.title = 'Video';
+          iframe.setAttribute('frameborder', '0');
+          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+          iframe.setAttribute('allowfullscreen', '');
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          container.appendChild(iframe);
+        }
+        overlay.classList.remove('hidden');
+      }
+
+      const closeBtn = e.target.closest('button[data-role="close-video"]');
+      if (closeBtn) {
+        e.preventDefault();
+        const root = closeBtn.closest('[class*="relative"]');
+        if (!root) return;
+        const overlay = root.querySelector('[data-role="video-overlay"]');
+        const container = root.querySelector('[data-role="video-container"]');
+        if (overlay) overlay.classList.add('hidden');
+        if (container) container.innerHTML = '';
+      }
+    });
+
+    window.addEventListener('popstate', function (e) {
+      if (e.state && e.state.slug) render(e.state.slug);
+    });
+  })();
+</script>
+{{ end }}
