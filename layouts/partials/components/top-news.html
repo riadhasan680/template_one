@@ -1,0 +1,39 @@
+{{/* Top News component - 3x2 card grid matching screenshot */}}
+<section class="w-full pt-4">
+  <div class="max-w-7xl mx-auto ">
+    <h2 class="text-2xl md:text-[30px] font-light uppercase font-[Oswald] tracking-wide text-[#3e6a91] mb-6">
+      <span class="inline-flex items-center justify-center bg-[#64b5f6] text-white w-10 h-10">
+        <span class="iconify-inline" data-icon="mdi:file-document-outline" data-width="16" data-height="16"></span>
+      </span>
+      TOP NEWS
+    </h2>
+
+    {{/* Data to mirror screenshot titles/dates */}}
+    {{ $items := slice
+      (dict "title" "Dead Rising 5 Preview" "date" "May 30, 2017" "seed" "news1")
+      (dict "title" "Tekken 7: Not a fan of this one" "date" "May 22, 2017" "seed" "news2")
+      (dict "title" "“Bigger And Better” GameStop Expo Announced, Here’s Everything You Need To Know" "date" "May 22, 2017" "seed" "news3")
+      (dict "title" "Injustice 2: A great edition to the series" "date" "May 22, 2017" "seed" "news4")
+      (dict "title" "Injustice 2 – Introducing Joker!" "date" "May 22, 2017" "seed" "news5")
+      (dict "title" "Injustice 2" "date" "May 22, 2017" "seed" "news6")
+    }}
+
+    <div class="grid grid-cols-1 md:grid-cols-3  gap-6">
+      {{ range $items }}
+      <a href="#" class="group block">
+        <div class="relative overflow-hidden">
+          <img src="https://picsum.photos/seed/{{ .seed }}/1200/700" alt="{{ .title }}" class="w-full h-44 sm:h-52 md:h-[180px] object-cover" />
+          {{ if eq .title "Injustice 2 – Introducing Joker!" }}
+          <span class="absolute inset-0 flex items-center justify-center">
+            <span class="iconify-inline text-white/90" data-icon="mdi:play-circle-outline" data-width="52" data-height="52"></span>
+          </span>
+          {{ end }}
+        </div>
+        <p class="mt-4 text-sm md:text-[18px] font-semibold text-black  hover:text-[#fe4a49]">{{ .title }}</p>
+        <p class="mt-2 text-xs text-gray-500  hover:underline">GhostPool · {{ .date }}</p>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+  <div class="border-t  mt-6"></div>
+</section>

@@ -1,0 +1,16 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}</title>
+
+  {{/* Tailwind CSS via Hugo Pipes + PostCSS from assets/css/main.css */}}
+  {{ $styles := resources.Get "css/main.css" | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink | relURL }}" integrity="{{ $styles.Data.Integrity }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Huber-inspired review & magazine theme">
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+</head>

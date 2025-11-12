@@ -1,0 +1,22 @@
+{{/* Shared Card component
+Inputs:
+- image (string): image URL
+- title (string): card title
+- heightClass (string, optional): Tailwind height class, default h-40
+- topLabel (string, optional): text for top-right label
+- topLabelClass (string, optional): classes for top label background/text
+- bottomLabel (string, optional): text for bottom-right label
+- bottomLabelClass (string, optional): classes for bottom label background/text
+*/}}
+<div>
+  <div class="relative overflow-hidden rounded">
+    <img src="{{ .image }}" alt="{{ .title }}" class="w-full {{ default "h-40" .heightClass }} object-cover" />
+    {{ with .topLabel }}
+      <span class="absolute top-2 right-2 text-xs {{ default "bg-blue-600 text-white" $.topLabelClass }} px-2 py-0.5 rounded">{{ . }}</span>
+    {{ end }}
+    {{ with .bottomLabel }}
+      <span class="absolute bottom-2 right-2 text-xs {{ default "bg-green-600 text-white" $.bottomLabelClass }} px-2 py-0.5 rounded">{{ . }}</span>
+    {{ end }}
+  </div>
+  {{ with .title }}<p class="mt-2 text-sm font-medium">{{ . }}</p>{{ end }}
+</div>

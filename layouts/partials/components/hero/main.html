@@ -1,0 +1,75 @@
+{{/* Hero Section component matching screenshot layout */}}
+<section class="relative w-full">
+  <!-- Background image across the whole hero section -->
+  <div class="absolute inset-0 -z-0">
+    <div class="h-full w-full"
+      style="background-image:url('https://picsum.photos/seed/city-bg/1800/800');background-size:cover;background-position:center;">
+    </div>
+    <div class="absolute inset-0 bg-black/60"></div>
+  </div>
+
+  <div class="relative z-10 max-w-[1480px] mx-auto ">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+      <!-- Main hero LEFT (2 cols) -->
+      <a href="#" class="lg:col-span-2 relative overflow-hidden rounded-none group">
+        <img src="https://picsum.photos/seed/injustice-2/1200/700" alt="Injustice 2"
+          class="w-full h-[260px] sm:h-[320px] lg:h-[420px] object-cover" />
+        <!-- Dark overlay + bottom gradient with title & excerpt -->
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div
+          class="absolute bottom-0 left-0 right-0 backdrop-blur-xs bg-black/40 from-black/70 to-transparent p-4 text-white">
+          <h3 class="text-[12px] sm:text-sm md:text-[26px] font-[Oswald] font-light tracking-wide uppercase">Injustice
+            2</h3>
+          <p class="mt-2 text-[11px] sm:text-[12px] md:text-[15px] opacity-90 font-[Oswald] font-light tracking-wide">Power
+            up and build the ultimate version of your favorite DC legends in Injustice 2.</p>
+        </div>
+        <!-- Vertical score badge on the right edge -->
+        <div
+          class="absolute bottom-0 right-0 bg-[#ef6c00] text-white px-3 py-2 md:px-7 md:py-[29px] font-bold text-base md:text-[28px]">
+          8</div>
+      </a>
+
+      <!-- Two stacked thumbs RIGHT (no gap, equal heights) -->
+      <div class="grid grid-rows-2 gap-0 h-[260px] sm:h-[320px] lg:h-[420px]">
+        <!-- Top right card -->
+        <a href="#" class="relative overflow-hidden rounded-none row-span-1">
+          <img src="https://picsum.photos/seed/forza-horizon-3/900/500" alt="Forza Horizon 3"
+            class="absolute inset-0 w-full h-full object-cover" />
+          <div
+            class="absolute bottom-0 left-0 right-0 backdrop-blur-xs bg-white/20 from-black/70 to-transparent p-4 py-[26px] text-white">
+            <!-- Title overlay top-left -->
+            <span
+              class="absolute top-2 left-2 text-white mt-2 uppercase   md:text-[16px] sm:text-[11px] ">Forza
+              Horizon 3</span>
+            <!-- Score badge on the right -->
+            <span
+              class="absolute bottom-0 right-0 bg-[#fb4948] text-white font-[Oswald] font-medium md:text-[28px] sm:text-sm p-4 ">9.3</span>
+          </div>
+        </a>
+
+        <!-- Bottom right card -->
+        <a href="#" class="relative overflow-hidden rounded-none row-span-1">
+          <img src="https://picsum.photos/seed/skylanders/900/500" alt="Skylanders Imaginators Review"
+            class="absolute inset-0 w-full h-full object-cover" />
+          <!-- Title overlay top-left -->
+
+          <!-- Score badge on the right (green) -->
+
+
+          <div
+            class="absolute bottom-0 left-0 right-0 backdrop-blur-xs bg-white/20 from-black/70 to-transparent p-4 py-[26px] text-white">
+            <!-- Title overlay top-left -->
+            <span
+              class="absolute top-2 left-2text-white mt-2 uppercase md:text-[16px] sm:text-[11px]  ">Skylanders
+              Imaginators Review</span>
+            <!-- Score badge on the right -->
+            <span
+              class="absolute bottom-0 right-0 bg-green-500 text-white font-[Oswald] font-medium md:text-[28px] sm:text-sm p-4 ">4.3</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t"></div>
+</section>

@@ -1,0 +1,25 @@
+{{ define "main" }}
+
+{{ partial "components/hero/main" . }}
+{{ partial "components/featured-reviews" . }}
+
+<div class="max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left column: 2 parts width, stack 3 sections -->
+    <div class="lg:col-span-2 py-8">
+      {{ partial "components/latest-games" . }}
+      {{ partial "components/top-news" . }}
+      {{ partial "components/most-viewed" . }}
+    </div>
+
+    <!-- Right column: 1 part width, stack 2 sections -->
+    <div class="lg:col-span-1 py-8">
+      {{ partial "components/user-reviews" . }}
+      {{ partial "components/favourites-right" . }}
+    </div>
+  </div>
+</div>
+
+{{ partial "components/videos" . }}
+{{ partial "components/all-reviews" . }}
+{{ end }}

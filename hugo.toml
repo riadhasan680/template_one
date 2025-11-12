@@ -1,0 +1,12 @@
+baseURL = '/'
+relativeURLs = true
+languageCode = 'en-us'
+title = 'Hugo + Tailwind'
+
+[pagination]
+  pagerSize = 10
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

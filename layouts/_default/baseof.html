@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+{{ partial "head.html" . }}
+<body class="bg-gray-50 text-gray-800 antialiased pt-16 md:pt-[80px]">
+{{ partial "header.html" . }}
+
+
+<main>
+{{ block "main" . }}{{ end }}
+</main>
+
+
+{{ partial "footer.html" . }}
+
+
+<!-- Scripts -->
+<script src="{{ "js/main.js" | relURL }}"></script>
+</body>
+</html>

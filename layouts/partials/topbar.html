@@ -1,0 +1,67 @@
+<header class="border-b bg-white">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-center justify-between h-14">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2">
+          <span class="inline-block w-8 h-8 bg-blue-600 text-white grid place-items-center rounded">L</span>
+          <span class="font-semibold text-lg">{{ site.Title }}</span>
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <div class="relative group">
+          <a href="/" class="hover:text-blue-600">Home</a>
+          <div class="absolute left-0 top-full mt-2 w-48 bg-white border rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Overview</a>
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Updates</a>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <button class="hover:text-blue-600">Features</button>
+          <div class="absolute left-0 top-full mt-2 w-[640px] bg-white border rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto p-4">
+            <div class="grid grid-cols-4 gap-4 text-sm">
+              <a href="#" class="block p-3 rounded hover:bg-gray-50"><span class="font-medium">Hubs</span></a>
+              <a href="#" class="block p-3 rounded hover:bg-gray-50"><span class="font-medium">Reviews</span></a>
+              <a href="#" class="block p-3 rounded hover:bg-gray-50"><span class="font-medium">Posts</span></a>
+              <a href="#" class="block p-3 rounded hover:bg-gray-50"><span class="font-medium">Pages</span></a>
+              <a href="#" class="block p-3 rounded hover:bg-gray-50"><span class="font-medium">Categories</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative group">
+          <button class="hover:text-blue-600">Buddypress</button>
+          <div class="absolute left-0 top-full mt-2 w-56 bg-white border rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Activity</a>
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Members</a>
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Groups</a>
+            <a class="block px-3 py-2 hover:bg-gray-50" href="#">Forums</a>
+          </div>
+        </div>
+
+        <a href="#" class="hover:text-blue-600">Games</a>
+        <a href="#" class="hover:text-blue-600">Shop</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#" class="p-2 rounded hover:bg-gray-100" aria-label="Buy">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386a.75.75 0 01.708.517l.429 1.286M7.5 14.25h10.086a.75.75 0 00.708-.517l2.456-7.368a.75.75 0 00-.708-.983H4.5"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 20.25a.75.75 0 100-1.5.75.75 0 000 1.5zM17.25 20.25a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg>
+        </a>
+        <a href="#" class="p-2 rounded hover:bg-gray-100" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10.5 3a7.5 7.5 0 105.146 13.051l3.651 3.652a.75.75 0 101.06-1.06l-3.652-3.651A7.5 7.5 0 0010.5 3zm0 1.5a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd"/></svg>
+        </a>
+        <a href="#" class="p-2 rounded hover:bg-gray-100" aria-label="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M19.633 7.997c.013.176.013.353.013.529 0 5.384-4.095 11.589-11.589 11.589-2.303 0-4.451-.676-6.258-1.84.325.038.637.051.975.051 1.908 0 3.664-.65 5.063-1.74-1.783-.038-3.285-1.213-3.804-2.832.253.038.506.064.772.064.37 0 .74-.051 1.085-.14-1.86-.38-3.26-2.012-3.26-3.985v-.051c.545.304 1.17.49 1.838.516-1.09-.724-1.806-1.968-1.806-3.369 0-.74.202-1.43.556-2.024 2.023 2.485 5.063 4.116 8.478 4.292-.064-.304-.102-.62-.102-.936 0-2.276 1.838-4.127 4.126-4.127 1.19 0 2.264.49 3.019 1.29.936-.19 1.833-.529 2.633-.987-.304.949-.949 1.74-1.785 2.239.833-.09 1.64-.317 2.384-.64-.545.833-1.23 1.57-2.023 2.16z"/></svg>
+        </a>
+        <a href="#" class="p-2 rounded hover:bg-gray-100" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M13.5 10.5V8.25c0-.621.504-1.125 1.125-1.125h1.125V5.25h-1.5a3 3 0 00-3 3v2.25H9v2.25h2.25V21h2.25v-8.25H15l.375-2.25h-1.875z"/></svg>
+        </a>
+        <a href="#" class="p-2 rounded hover:bg-gray-100" aria-label="Pinterest">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12S6.615 21.75 12 21.75c.884 0 1.734-.127 2.544-.364-.352-.523-.67-1.119-.935-1.793-.31-.775-.46-1.57-.46-2.361 0-1.054.37-2.004 1.051-2.763.523-.586.846-1.343.846-2.15 0-1.617-1.315-2.932-2.932-2.932-1.617 0-2.932 1.315-2.932 2.932 0 .679.232 1.316.655 1.832l-.845 3.173c-.08.302-.125.474-.125.474-.166.65-.95.982-1.549.664-.6-.318-.814-1.077-.496-1.676l1.572-2.922c-.162-.49-.245-1.003-.245-1.516 0-2.553 2.073-4.626 4.626-4.626s4.626 2.073 4.626 4.626c0 1.208-.471 2.371-1.311 3.233-.313.323-.498.75-.498 1.198 0 .524.203 1.032.565 1.414.214.226.33.527.33.834 0 .447-.145.895-.421 1.263-.287.383-.447.767-.447 1.205 0 .541.166 1.06.476 1.503A9.748 9.748 0 0012 21.75C17.385 21.75 21.75 17.385 21.75 12S17.385 2.25 12 2.25z"/></svg>
+        </a>
+        <a href="#" class="ml-2 px-3 py-1.5 rounded border hover:bg-gray-50">Login</a>
+      </div>
+    </div>
+  </div>
+</header>

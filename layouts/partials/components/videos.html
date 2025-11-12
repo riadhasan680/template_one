@@ -1,0 +1,44 @@
+{{/* Videos section - full width scenic background with 5 cards matching screenshot */}}
+<section class="relative w-full">
+  <!-- Background image + blue gradient overlay -->
+  <div class="absolute inset-0 -z-0">
+    <div class="h-full w-full"
+      style="background-image:url('https://picsum.photos/seed/rock-cliffs/1800/600');background-size:cover;background-position:center;"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#3aa9e0]/80 to-[#1c6fb5]/80"></div>
+  </div>
+
+  <!-- Content container -->
+  <div class="relative z-10 max-w-7xl mx-auto py-8">
+    <h2 class="text-2xl md:text-[30px] font-light uppercase font-[Oswald] tracking-wide text-white mb-6">Videos</h2>
+
+    {{/* Data seeded to mirror screenshot titles & dates */}}
+    {{ $videos := slice
+      (dict "title" "Injustice 2 – Introducing Joker!" "date" "May 22, 2017" "seed" "video-1")
+      (dict "title" "TEKKEN 7 – Eddy Gordo Character Reveal Trailer" "date" "April 24, 2017" "seed" "video-2")
+      (dict "title" "Injustice 2: Story Trailer" "date" "April 23, 2017" "seed" "video-3")
+      (dict "title" "1 TB Xbox One S Bundles Announced" "date" "March 30, 2017" "seed" "video-4")
+      (dict "title" "Forza Horizon 3 Adding These 7 Cars Tomorrow, See Them All Here" "date" "March 29, 2017" "seed" "video-5")
+    }}
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+      {{ range $videos }}
+      <a href="#" class="group block">
+        <div class="relative overflow-hidden">
+          <img src="https://picsum.photos/seed/{{ .seed }}/600/400" alt="{{ .title }}"
+            class="w-full h-[110px] sm:h-[120px] md:h-[130px] object-cover" />
+          <!-- Play button overlay -->
+          <span class="absolute inset-0 grid place-items-center">
+            <span class="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-yellow-400/90 text-black grid place-items-center rounded-full shadow">
+              ▶
+            </span>
+          </span>
+        </div>
+        <div class="mt-2 text-white">
+          <p class="text-[11px] sm:text-[12px] md:text-[18px] font-semibold leading-4">{{ .title }}</p>
+          <p class="text-[10px] opacity-80 mt-1">{{ .date }}</p>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+  </div>
+</section>
