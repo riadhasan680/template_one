@@ -3,3 +3,14 @@
 @tailwind utilities;
 
 /* Custom utilities or components can go here */
+/* Top News article spacing fix: align left column top with sidebar */
+.topnews-article > p:first-child,
+.topnews-article > h2:first-child,
+.topnews-article > h3:first-child {
+  margin-top: 0;
+}
+
+/* Ensure sidebar and content start at same top line */
+.topnews-sidebar > *:first-child {
+  margin-top: 0;
+}

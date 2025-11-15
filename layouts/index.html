@@ -1,9 +1,10 @@
 {{ define "main" }}
 
 {{ partial "components/hero/main" . }}
-{{ partial "components/featured-reviews" . }}
-
-<div class="max-w-7xl mx-auto">
+<div class="px-2 md:px-0">
+  {{ partial "components/featured-reviews" . }}
+</div>
+<div class="max-w-7xl mx-auto px-2 md:px-0">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Left column: 2 parts width, stack 3 sections -->
     <div class="lg:col-span-2 py-8">
@@ -20,6 +21,8 @@
   </div>
 </div>
 
-{{ partial "components/videos" . }}
-{{ partial "components/all-reviews" . }}
+<div class="px-2 md:px-0">
+  {{ partial "components/videos" . }}
+  {{ partial "components/all-reviews" . }}
+</div>
 {{ end }}

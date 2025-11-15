@@ -85,6 +85,7 @@
           </a>
           {{ end }}
         </div>
+        
 
         <!-- Right: Sidebar info -->
         <aside class="lg:col-span-1 space-y-6">
@@ -267,6 +268,33 @@
         </div>
       </div>
     </div>
+    <!-- Leave a reply -->
+      <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-10">
+        <h3 class="uppercase font-[Oswald] text-[20px] text-gray-700 mb-4">Leave a reply</h3>
+        <div class="text-sm text-gray-600 mb-3">Login with your Social ID</div>
+        <div class="flex items-center gap-3 text-2xl mb-4">
+          <span class="iconify text-[#3b5998]" data-icon="mdi:facebook"></span>
+          <span class="iconify text-[#1da1f2]" data-icon="mdi:twitter"></span>
+          <span class="iconify text-[#db4437]" data-icon="mdi:google"></span>
+          <span class="iconify text-[#e1306c]" data-icon="mdi:instagram"></span>
+        </div>
+        <div class="text-xs text-gray-500 mb-2">Your email address will not be published. Required fields are marked
+          <span class="text-red-500 font-medium">*</span></div>
+        <form class="space-y-4">
+          <label class="block">
+            <span class="text-sm text-gray-700">Comment <span class="text-red-500">*</span></span>
+            <textarea rows="6" class="mt-1 w-full border border-gray-300 rounded p-3   focus:border-[#fe4a49] outline-none" placeholder="Write your comment…"></textarea>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <input type="text" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Name *">
+            <input type="email" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Email *">
+            <input type="url" class="border border-gray-300 focus:border-[#fe4a49] rounded p-3 outline-none" placeholder="Website">
+          </div>
+          <div>
+            <button type="button" class="bg-black text-white px-6 py-2 rounded">Submit</button>
+          </div>
+        </form>
+      </div>
   </section>
   <script>
   (function(){

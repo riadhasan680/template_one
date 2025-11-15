@@ -10,17 +10,17 @@
 
     {{/* Data to mirror screenshot titles/dates */}}
     {{ $items := slice
-      (dict "title" "Dead Rising 5 Preview" "date" "May 30, 2017" "seed" "news1")
-      (dict "title" "Tekken 7: Not a fan of this one" "date" "May 22, 2017" "seed" "news2")
-      (dict "title" "“Bigger And Better” GameStop Expo Announced, Here’s Everything You Need To Know" "date" "May 22, 2017" "seed" "news3")
-      (dict "title" "Injustice 2: A great edition to the series" "date" "May 22, 2017" "seed" "news4")
-      (dict "title" "Injustice 2 – Introducing Joker!" "date" "May 22, 2017" "seed" "news5")
-      (dict "title" "Injustice 2" "date" "May 22, 2017" "seed" "news6")
+      (dict "title" "Dead Rising 5 Preview" "date" "May 30, 2017" "seed" "news1" "slug" "dead-rising-5-preview")
+      (dict "title" "Tekken 7: Not a fan of this one" "date" "May 22, 2017" "seed" "news2" "slug" "tekken-7-not-a-fan")
+      (dict "title" "“Bigger And Better” GameStop Expo Announced, Here’s Everything You Need To Know" "date" "May 22, 2017" "seed" "news3" "slug" "games-expo-announced")
+      (dict "title" "Injustice 2: A great edition to the series" "date" "May 22, 2017" "seed" "news4" "slug" "injustice-2-great-edition")
+      (dict "title" "Injustice 2 – Introducing Joker!" "date" "May 22, 2017" "seed" "news5" "slug" "injustice-2-introducing-joker")
+      (dict "title" "Injustice 2" "date" "May 22, 2017" "seed" "news6" "slug" "injustice-2")
     }}
 
     <div class="grid grid-cols-1 md:grid-cols-3  gap-6">
       {{ range $items }}
-      <a href="#" class="group block">
+      <a href="/top-news/{{ .slug }}/" class="group block">
         <div class="relative overflow-hidden">
           <img src="https://picsum.photos/seed/{{ .seed }}/1200/700" alt="{{ .title }}" class="w-full h-44 sm:h-52 md:h-[180px] object-cover" />
           {{ if eq .title "Injustice 2 – Introducing Joker!" }}
